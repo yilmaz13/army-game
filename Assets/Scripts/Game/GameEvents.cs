@@ -15,5 +15,11 @@ public static class GameEvents
     public static event Action<bool> OnEndGame;
 
     public static void EndedGame(bool succes) { OnEndGame?.Invoke(succes); }
+
+    public static event Action OnClickLevelRestart;
+    public static void ClickLevelRestart() { OnClickLevelRestart?.Invoke(); }
+
+    public static event Action OnClickLevelNext;
+    public static void ClickLevelNext() { OnClickLevelNext?.Invoke(); }
 }
 
