@@ -63,6 +63,14 @@ namespace Army.State
             string prevState = CurrentState;
             CurrentState = state;
 
+            //TODO
+            LoadingState _loadingState = (LoadingState)_gameStates[StateNames.Loading];
+            _loadingState.SetTransitionState(targetState);
+
+            if (string.IsNullOrEmpty(CurrentState) == false)
+            {
+                _gameStates[CurrentState].Activate();
+            }
         }
 
         #endregion
