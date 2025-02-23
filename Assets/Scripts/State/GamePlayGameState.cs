@@ -1,4 +1,5 @@
 using Army.Game.UI;
+using Army.Popup;
 using Army.State;
 using UnityEngine;
 
@@ -50,7 +51,9 @@ public class GamePlayGameState : AStateBase,
         InitializeDriftGame();
 
         _gameView.Show();
-        SubscribeEvents();      
+        SubscribeEvents();
+
+        _startedGame = true;      
     }
 
     public override void Deactivate()
@@ -58,6 +61,7 @@ public class GamePlayGameState : AStateBase,
         Debug.Log("<color=red>GameplayGame State</color> DeOnActive");
 
         UnsubscribeEvents();
+        ClearScene();
     }
 
     public override void UpdateState()
@@ -74,13 +78,14 @@ public class GamePlayGameState : AStateBase,
         {
             InstantiateGameUI();
             InstantiateGameView();
-            InstantiateDriftController();
+            InstantiateGameController();
         }
     }
     private void InstantiateGameUI()
     {
         GameObject gameUIViewObject = GameObject.Instantiate(_resourceReferences.GameUIPrefab, _sceneReferences.UIViewContainer.transform);
         _gameUIView = gameUIViewObject.GetComponent<GameUIView>();
+        _gameUIView.Show();
     }
 
     private void InstantiateGameView()
@@ -90,7 +95,7 @@ public class GamePlayGameState : AStateBase,
         _gameView.Initialize(_gameController, Camera.main, _resourceReferences.GameResources);
     }
 
-    private void InstantiateDriftController()
+    private void InstantiateGameController()
     {
         _gameController = new GameController();
         _gameController.Initialize(_gameView, _gameUIView, this, _resourceReferences.GameResources, _camera);
@@ -115,6 +120,15 @@ public class GamePlayGameState : AStateBase,
         GameEvents.OnClickGotoMenu -= GotoMenu;
     }
 
+    private void ClearScene()
+    {
+        _gameUIView.UnloadLevel();
+        _gameUIView.Hide();
+
+        _gameController.Unload();
+        PopupManager.Instance.HideAllPopups();
+    }
+
     private void GotoMenu()
     {
         _stateManager.ChangeTransitionState(StateNames.Loading, StateNames.MainMenu);
@@ -128,12 +142,12 @@ public class GamePlayGameState : AStateBase,
         _startedGame = false;
 
         if (success)
-        {
-            //LevelSuccess           
+        {            
+            PopupManager.Instance.ShowPopup(PopupNames.LevelSuccessPopup);
         }
         else
-        {
-            //LevelFail           
+        {              
+            PopupManager.Instance.ShowPopup(PopupNames.LevelFailedPopup);
         }
     }
 
