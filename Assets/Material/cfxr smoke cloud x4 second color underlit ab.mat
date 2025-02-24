@@ -86,6 +86,7 @@ Material:
     - _OVERLAYBLEND: 0
     - _OVERLAYTEX: 0
     - _ReceivedShadowsStrength: 0.5
+    - _RingTopOffset: 0.05
     - _SecondColorSmooth: 0.4
     - _ShadowStrength: 0.5
     - _SingleChannel: 0
@@ -105,10 +106,12 @@ Material:
     - _UseLighting: 0
     - _UseLightingWorldPosOffset: 0
     - _UseNormalMap: 0
+    - _UseRadialUV: 0
     - _UseSP: 1
     - _UseSecondColor: 1
     - _UseUV2Distortion: 0
     - _UseUVDistortion: 0
+    - _WorldSpaceRing: 0
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 2, g: 2, b: 2, a: 1}
