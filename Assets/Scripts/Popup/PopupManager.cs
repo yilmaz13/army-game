@@ -7,15 +7,16 @@ namespace Army.Popup
     {
         [SerializeField] private GameObject[] _prefabs;
         [SerializeField] private RectTransform _container;
-        //      Private
+        //PRIVATE FIELDS
         private bool _isInitialized;
         private Dictionary<string, GameObject> _prefabsByName;
 
         private List<PopupView> _activePopupViews;
 
-        //      Singleton instance
+        // SINGLETON
         public static PopupManager Instance { get; private set; }
-        //      Unity Methods
+        
+        // UNITY METHODS
 
         private void Awake()
         {
@@ -69,6 +70,28 @@ namespace Army.Popup
             _activePopupViews.Add(popup);
         }
 
+        public T ShowPopup<T>() where T : PopupView
+        {
+            if (_activePopupViews.Count > 0)
+            {
+                for (int i = 0; i < _activePopupViews.Count; i++)
+                {
+                    _activePopupViews[i].Hidden();
+                }
+            }
+
+            GameObject popupPrefab = _prefabsByName[typeof(T).Name];
+            GameObject popupObject = Instantiate(popupPrefab, _container);
+            T popup = popupObject.GetComponent<T>();
+
+            popupObject.name = popupPrefab.name;
+            popup.Initialize();
+            popup.Open();
+            _activePopupViews.Add(popup);
+
+            return popup;
+        }
+
         public void HideAllPopups()
         {
             if (_activePopupViews.Count > 0)
@@ -83,6 +106,19 @@ namespace Army.Popup
 
             }
             _activePopupViews.Clear();
+        }
+
+        public T GetActivePopup<T>() where T : PopupView
+        {
+            for (int i = 0; i < _activePopupViews.Count; i++)
+            {
+                if (_activePopupViews[i] is T)
+                {
+                    return (T)_activePopupViews[i];
+                }
+            }
+
+            return null;
         }
 
         #endregion

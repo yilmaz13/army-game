@@ -18,7 +18,7 @@ namespace Army.Popup
         //  METHODS
         #region PopupView implementations
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             _backgroundColor = _background.color;
             _background.color = Color.clear;
@@ -30,48 +30,48 @@ namespace Army.Popup
             gameObject.SetActive(true);
 
             _background.DOColor(_backgroundColor, 0.5f)
-                       .SetEase(Ease.OutQuad);
+                       .SetEase(Ease.OutQuad).SetUpdate(true);
 
             _panel.DOAnchorPos(Vector2.zero, 0.5f)
-                  .SetEase(Ease.OutQuad)
+                  .SetEase(Ease.OutQuad).SetUpdate(true)
                   .OnComplete(() => { EnableInput(); });
         }
 
-        public void Hidden()
+        public virtual void Hidden()
         {
             DisableInput();
 
             _background.DOColor(Color.clear, 0.5f)
-                       .SetEase(Ease.OutQuad);
+                       .SetEase(Ease.OutQuad).SetUpdate(true);
 
             _panel.DOAnchorPos(new Vector2(0, -2000), 0.5f)
-                  .SetEase(Ease.OutQuad)
+                  .SetEase(Ease.OutQuad).SetUpdate(true)
                   .OnComplete(() => { gameObject.SetActive(false); });
         }
 
-        public void Revealed()
+        public virtual void Revealed()
         {
             gameObject.SetActive(true);
 
 
             _background.DOColor(_backgroundColor, 0.5f)
-                       .SetEase(Ease.OutQuad);
+                       .SetEase(Ease.OutQuad).SetUpdate(true);
 
             _panel.DOAnchorPos(Vector2.zero, 0.5f)
-                  .SetEase(Ease.OutQuad)
+                  .SetEase(Ease.OutQuad).SetUpdate(true)
                   .OnComplete(() => { EnableInput(); });
         }
 
-        public void Close()
+        public virtual void Close()
         {
             DisableInput();
 
 
             _background.DOColor(Color.clear, 0.5f)
-                       .SetEase(Ease.OutQuad);
+                       .SetEase(Ease.OutQuad).SetUpdate(true);
 
             _panel.DOAnchorPos(new Vector2(0, -2000), 0.5f)
-                  .SetEase(Ease.OutQuad)
+                  .SetEase(Ease.OutQuad).SetUpdate(true)
                   .OnComplete(() => { Destroy(gameObject); });
         }
 

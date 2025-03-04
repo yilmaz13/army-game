@@ -5,5 +5,7 @@ namespace Army.Popup
         public const string LevelFailedPopup = "LevelFailedPopUp";
         public const string LevelSuccessPopup = "LevelCompletePopUp";
         public const string SettingPopup = "SettingPopUp";
+        public const string LevelUpCardPopup = "LevelUpCardPopupView";
+
     }
 }
