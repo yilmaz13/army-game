@@ -11,6 +11,16 @@ namespace Army.Game.UI
         [SerializeField] private Button _settingButton;
         [SerializeField] private TMP_Text _levelNameLabel;
 
+        [SerializeField] private XpSliderUIView _blueArmyXpSlider;     
+
+        public void SetupBlueArmyStatPanel(ArmyController army)
+        {
+            if (army != null && _blueArmyXpSlider != null)
+            {
+                _blueArmyXpSlider.SetTrackedArmy(army);
+            }
+        }
+
         public void Show()
         {
             gameObject.SetActive(true);
@@ -24,16 +34,17 @@ namespace Army.Game.UI
         }
         public void LoadLevel(int level)
         {
-            _levelNameLabel.text = "Level" + level;           
+            _levelNameLabel.text = "Chapter" + level;           
         }
         public void UnloadLevel()
         {
-            _levelNameLabel.text = "Level --";            
+            _levelNameLabel.text = "Chapter --";            
         }
 
         private void OnSettingsButtonClick()
         {
             PopupManager.Instance.ShowPopup(PopupNames.SettingPopup);
         }
+
     }
 }

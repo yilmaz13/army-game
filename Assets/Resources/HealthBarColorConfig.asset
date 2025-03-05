@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e55503ad7559c54b8b8d2ba0420df59, type: 3}
+  m_Name: HealthBarColorConfig
+  m_EditorClassIdentifier: 
+  _blueTeamColor: {r: 0.30588236, g: 0.627451, b: 0.99607843, a: 1}
+  _redTeamColor: {r: 0.98039216, g: 0.27450982, b: 0.25490198, a: 1}
+  _yellowTeamColor: {r: 0.99607843, g: 0.7647059, b: 0.08235294, a: 1}
+  _purpleTeamColor: {r: 0.5882353, g: 0.42352942, b: 0.99607843, a: 1}
+  _greenTeamColor: {r: 0.101960786, g: 0.72156864, b: 0.5058824, a: 1}
+  _orangeTeamColor: {r: 0.99607843, g: 0.48894435, b: 0.08235296, a: 1}
+  _pinkTeamColor: {r: 1, g: 0.508924, b: 0.495283, a: 1}

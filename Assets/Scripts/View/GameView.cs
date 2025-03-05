@@ -10,12 +10,18 @@ namespace Army.Game.UI
         private Camera _gameCamera;
         private GameResources _gameResources;
 
+        [SerializeField] private Transform _teamTwoSpawnPoint;
+         [SerializeField] private Transform _teamOneSpawnPoint;   
+
         #endregion
 
         #region Public Members
         public string CurrentState { get; set; }
         public string TransitionState { get; set; }
         public Transform ViewTransform => transform;
+        public Transform TeamOneSpawnPoint => _teamOneSpawnPoint;
+        public Transform TeamTwoSpawnPoint => _teamTwoSpawnPoint;
+
 
         #endregion
 

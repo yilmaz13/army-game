@@ -51,9 +51,7 @@ public class GamePlayGameState : AStateBase,
         InitializeDriftGame();
 
         _gameView.Show();
-        SubscribeEvents();
-
-        _startedGame = true;      
+        SubscribeEvents(); 
     }
 
     public override void Deactivate()
@@ -93,11 +91,12 @@ public class GamePlayGameState : AStateBase,
         GameObject mainMenuObject = GameObject.Instantiate(_resourceReferences.GameViewPrefab, _sceneReferences.ViewContainer.transform);
         _gameView = mainMenuObject.GetComponent<GameView>();
         _gameView.Initialize(_gameController, Camera.main, _resourceReferences.GameResources);
+
+        _gameController = mainMenuObject.GetComponent<GameController>();
     }
 
     private void InstantiateGameController()
-    {
-        _gameController = new GameController();
+    {       
         _gameController.Initialize(_gameView, _gameUIView, this, _resourceReferences.GameResources, _camera);
     }
 
@@ -111,6 +110,7 @@ public class GamePlayGameState : AStateBase,
         GameEvents.OnStartGame += StartGameListener;
         GameEvents.OnEndGame += EndGameListener;
         GameEvents.OnClickGotoMenu += GotoMenu;
+        GameEvents.OnClickLevelNext += LevelNext;
     }
 
     private void UnsubscribeEvents()
@@ -118,6 +118,7 @@ public class GamePlayGameState : AStateBase,
         GameEvents.OnStartGame -= StartGameListener;
         GameEvents.OnEndGame -= EndGameListener;
         GameEvents.OnClickGotoMenu -= GotoMenu;
+        GameEvents.OnClickLevelNext -= LevelNext;
     }
 
     private void ClearScene()
@@ -134,13 +135,19 @@ public class GamePlayGameState : AStateBase,
         _stateManager.ChangeTransitionState(StateNames.Loading, StateNames.MainMenu);
     }
 
+    private void LevelNext()
+    {
+        _gameController.Unload();
+        _gameController.Load();
+    }
+
     private void EndGameListener(bool success)
     {
-        if (!_startedGame)
-            return;
+        if (!_gameController.IsGameStarted)
+            return;    
 
-        _startedGame = false;
-
+        _gameController.IsGameStarted = false;
+        
         if (success)
         {            
             PopupManager.Instance.ShowPopup(PopupNames.LevelSuccessPopup);

@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f57fe8742e530469c883356dbce714, type: 3}
+  m_Name: CaslteStats
+  m_EditorClassIdentifier: 
+  agentType: 5
+  prefab: {fileID: 3544069613707860194, guid: ec991ee6c47e9be4188579745cc74334, type: 3}
+  attackRange: 2
+  attackSpeed: 2
+  chaseRange: 3
+  levelStats:
+  - level: 1
+    icon: {fileID: 21300000, guid: ff266dc831e2e3a4484fdeb170e3eda9, type: 3}
+    cardFrame: {fileID: 21300000, guid: 3dfbb1a931320e84083229ba40d12b61, type: 3}
+    titleSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d, type: 3}
+    descriptionSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d,
+      type: 3}
+    damage: 10
+    speed: 2
+    attackRange: 3
+    health: 1000
+    armor: 0
+    attackSpeed: 2
+    chaseRange: 3
+    upgradeDescription: 
+    rank: 0
+  - level: 2
+    icon: {fileID: 21300000, guid: ff266dc831e2e3a4484fdeb170e3eda9, type: 3}
+    cardFrame: {fileID: 21300000, guid: 3dfbb1a931320e84083229ba40d12b61, type: 3}
+    titleSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d, type: 3}
+    descriptionSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d,
+      type: 3}
+    damage: 10
+    speed: 2
+    attackRange: 3
+    health: 1000
+    armor: 0
+    attackSpeed: 2
+    chaseRange: 3
+    upgradeDescription: 
+    rank: 0
+  - level: 2
+    icon: {fileID: 21300000, guid: af4d501feccafc34eaff556d9e9d0e54, type: 3}
+    cardFrame: {fileID: 21300000, guid: 3dfbb1a931320e84083229ba40d12b61, type: 3}
+    titleSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d, type: 3}
+    descriptionSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d,
+      type: 3}
+    damage: 10
+    speed: 2
+    attackRange: 3
+    health: 1000
+    armor: 0
+    attackSpeed: 2
+    chaseRange: 3
+    upgradeDescription: 
+    rank: 0
+  - level: 2
+    icon: {fileID: 21300000, guid: 21f1027d2ec4c1c4a8189fd7bdad6994, type: 3}
+    cardFrame: {fileID: 21300000, guid: 3dfbb1a931320e84083229ba40d12b61, type: 3}
+    titleSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d, type: 3}
+    descriptionSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d,
+      type: 3}
+    damage: 10
+    speed: 2
+    attackRange: 3
+    health: 1000
+    armor: 0
+    attackSpeed: 2
+    chaseRange: 3
+    upgradeDescription: 
+    rank: 0
+  - level: 5
+    icon: {fileID: 21300000, guid: f3e829051c6206e429fd1997b599da26, type: 3}
+    cardFrame: {fileID: 21300000, guid: 3dfbb1a931320e84083229ba40d12b61, type: 3}
+    titleSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d, type: 3}
+    descriptionSprite: {fileID: 21300000, guid: cb3eae7d5eeb766418e372753347930d,
+      type: 3}
+    damage: 10
+    speed: 2
+    attackRange: 3
+    health: 1000
+    armor: 0
+    attackSpeed: 2
+    chaseRange: 3
+    upgradeDescription: 
+    rank: 0

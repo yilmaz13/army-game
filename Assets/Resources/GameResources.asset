@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46dce101ae8310d428c831d731d50e62, type: 3}
   m_Name: GameResources
   m_EditorClassIdentifier: 
-  SlotViewPrefab: {fileID: 0}
-  ItemViewPrefab: {fileID: 0}
-  SlotRadius: 0
+  _ArmyControllerPrefab: {fileID: 2330149890114300276, guid: 2e02822faef4cfa478c51e2f2e52f379,
+    type: 3}
+  AgentStats:
+  - {fileID: 11400000, guid: e841e799034f2584ab54355ccc915620, type: 2}
+  - {fileID: 11400000, guid: ef36b8e034bfc1a4a9b4fb0d3910856a, type: 2}
+  - {fileID: 11400000, guid: 8a7e7db8dd4190347878e58b911ec2e8, type: 2}
+  - {fileID: 11400000, guid: a6a028b170ed84741b6f94d00545c4a8, type: 2}
+  _castleStats: {fileID: 11400000, guid: 160362d64d9182f4e8dc0888017204d4, type: 2}
+  _wallStats: {fileID: 11400000, guid: 160362d64d9182f4e8dc0888017204d4, type: 2}
+  _armyLevelData: {fileID: 11400000, guid: fa6249a214725eb4784dbc7ab8220d49, type: 2}

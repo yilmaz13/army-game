@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameData : MonoBehaviour
+public class GameData
 {
     #region Public Methos
     public void Load()
