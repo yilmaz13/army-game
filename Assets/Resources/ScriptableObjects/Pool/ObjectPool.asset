@@ -16,7 +16,7 @@ MonoBehaviour:
   - pooledObjects: []
     prefab: {fileID: 1194809147558916, guid: e4690313cf5f944469cd080a776127a2, type: 3}
     startingParent: {fileID: 0}
-    startingQuantity: 10
+    startingQuantity: 20
   - pooledObjects: []
     prefab: {fileID: 1924976701409962, guid: 7a57ec3d60df0264d9e43dde3322efce, type: 3}
     startingParent: {fileID: 0}
@@ -24,11 +24,11 @@ MonoBehaviour:
   - pooledObjects: []
     prefab: {fileID: 1225185324592572, guid: 64b2416d71210a6449b6eeae10318178, type: 3}
     startingParent: {fileID: 0}
-    startingQuantity: 10
+    startingQuantity: 20
   - pooledObjects: []
     prefab: {fileID: 1812830733411721, guid: bfcddf05ad24c6749961ad29fdfd3617, type: 3}
     startingParent: {fileID: 0}
-    startingQuantity: 10
+    startingQuantity: 20
   - pooledObjects: []
     prefab: {fileID: 1275327954651545, guid: bda19233b818fe34484c5cb6c8bacaef, type: 3}
     startingParent: {fileID: 0}
