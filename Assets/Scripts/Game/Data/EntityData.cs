@@ -8,6 +8,7 @@ public class EntityData
     protected float _armor;
     protected float _attackRange;
     protected UnitRank _rank; 
+    protected AgentUnitType _unitType;
     protected Team _team;   
 
     // PUBLIC PROPERTIES
@@ -20,11 +21,14 @@ public class EntityData
     public UnitRank Rank => _rank; 
     public Team Team => _team;   
 
+    public AgentUnitType UnitType => _unitType;
+
     public EntityData(int level, 
                       float damage,
                       float health, 
                       float armor, 
                       UnitRank rank,
+                      AgentUnitType agentUnitType,
                       Team team, 
                       float attackSpeed,
                       float attackRange)
@@ -36,7 +40,8 @@ public class EntityData
         _rank = rank;
         _team = team;
         _attackSpeed = attackSpeed;
-        _attackRange = attackRange;       
+        _attackRange = attackRange;    
+        _unitType = agentUnitType;     
     }
 
     public virtual void Initialize()

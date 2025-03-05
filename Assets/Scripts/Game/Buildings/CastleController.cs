@@ -48,6 +48,7 @@ public class CastleController : BuildingController, IDamageable
                            CastleView buildingView, 
                            IAgentControllerListener listener,
                            UnitRank rank,
+                           AgentUnitType unitType,
                            Team team)
                           
     {    
@@ -55,8 +56,9 @@ public class CastleController : BuildingController, IDamageable
 
         base.Initialize(stats, 
                         buildingView, 
-                        listener, 
+                        listener,                        
                         rank, 
+                        unitType,
                         team);
         
     }
@@ -79,6 +81,11 @@ public class CastleController : BuildingController, IDamageable
     public void SetSpawnSliderValue(float value)
     {
         _castleView.SetSpawnSliderValue(value);
+    }
+
+    public Vector3 GetCastleViewRotation()
+    {
+        return _castleView.GetCastleRotation();
     }
 
     public void ShowLevelUpNotification(int newLevel)

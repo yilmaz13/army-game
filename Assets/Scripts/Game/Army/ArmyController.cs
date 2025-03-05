@@ -99,7 +99,8 @@ public class ArmyController : MonoBehaviour,
             transform,
             spawnPosition, 
             _team, 
-            this
+            this,
+            GetCastleRotation()
         );
         
         if (agent != null)
@@ -155,7 +156,6 @@ public class ArmyController : MonoBehaviour,
         GameObject castleObj = Instantiate(castleStats.prefab, spawnPosition, Quaternion.identity);
 
 
-
         var castleView = castleObj.GetComponent<CastleView>();
         var castle = castleObj.GetComponent<CastleController>();   
  
@@ -164,7 +164,8 @@ public class ArmyController : MonoBehaviour,
         castle.Initialize(  levelStats,
                             castleView, 
                             this,
-                            levelStats.rank,             
+                            levelStats.rank,  
+                            castleStats.unitType,           
                             _team
                          );
         
@@ -189,13 +190,13 @@ public class ArmyController : MonoBehaviour,
         if (_team == Team.Red)
         {
             _spawnInterval = 2f;
-            _maxSoldiers = 10;
+            _maxSoldiers = 20;
             _castleController.GetComponent<CastleView>().SetPoint(1);
         }
         else
         {
             _spawnInterval = 2f;
-            _maxSoldiers = 12;
+            _maxSoldiers = 20;
         }
     }
 
@@ -290,6 +291,11 @@ public class ArmyController : MonoBehaviour,
         _listener.OnDefeatCastle(_team);
         OnArmyDestroyed?.Invoke();
     }
+
+    public Vector3 GetCastleRotation()
+    {
+        return _castleController.GetCastleViewRotation();        
+    }
     public void AddAvailableAgentType(AgentType agentType)
     {
         if  (_agentFactory.IsAgentTypeAvailable(agentType))
@@ -365,5 +371,59 @@ public class ArmyController : MonoBehaviour,
         OnLevelUp = null;
         OnExperienceChanged = null;
         OnArmyDestroyed = null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_unitManager != null && _unitManager.IsFormationVisible)
+        {         
+            Gizmos.color = _team == Team.Blue ? new Color(0, 0.5f, 1f, 0.8f) : new Color(1f, 0.3f, 0.3f, 0.8f);
+            Gizmos.DrawSphere(_unitManager.FormationTarget, 0.5f);            
+         
+            Gizmos.color = _team == Team.Blue ? new Color(0, 0.5f, 1f, 0.4f) : new Color(1f, 0.3f, 0.3f, 0.4f);
+            
+            var positions = _unitManager.FormationPositions;
+            foreach (var pos in positions)
+            {              
+                Gizmos.DrawSphere(pos, 0.3f);
+            }
+                      
+            if (positions.Count > 1)
+            {
+                Gizmos.color = _team == Team.Blue ? new Color(0, 0.3f, 0.8f, 0.6f) : new Color(0.8f, 0.2f, 0.2f, 0.6f);                
+              
+                for (int i = 0; i < positions.Count - 1; i++)
+                {                    
+                    bool isNewRow = (i % 9 == 8);
+                    
+                    if (!isNewRow)
+                    {
+                        Gizmos.DrawLine(positions[i], positions[i + 1]);
+                    }
+                }                
+              
+                if (positions.Count > 0)
+                {
+                    DrawArrow(_unitManager.FormationTarget, positions[0], 0.4f);
+                }
+            }
+        }
+    }
+
+    private void DrawArrow(Vector3 from, Vector3 to, float arrowHeadSize)
+    {
+        Gizmos.DrawLine(from, to);
+        
+        Vector3 direction = (to - from).normalized;
+        Vector3 right = Quaternion.Euler(0, 30, 0) * -direction * arrowHeadSize;
+        Vector3 left = Quaternion.Euler(0, -30, 0) * -direction * arrowHeadSize;
+        
+        Gizmos.DrawLine(to, to + right);
+        Gizmos.DrawLine(to, to + left);
+    }
+
+    public Vector3 GetIdleRotation()
+    {
+       return GetCastleRotation();
     }
 }

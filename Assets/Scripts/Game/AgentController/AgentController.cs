@@ -22,7 +22,10 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     public float Armor => _agentData.Armor;
     public UnitRank Rank => _agentData.Rank;
     public Team GetTeam => _agentData.Team;
+
+    public AgentUnitType UnitType => _agentData.UnitType;
     public bool IsActive => _isActive;
+    public Vector3 IdleRotation => _agentData.IdleRotation;
     public Vector3 LastPosition { get; set; }
     public HealthController HealthController { get; private set; }
     public ArmorController ArmorController { get; private set; }
@@ -40,28 +43,30 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
         AgentView agentView, 
         IAgentControllerListener listener, 
         UnitRank rank,
-        Team team)
+        AgentUnitType unitType,
+        Team team,
+        Vector3 idleRotation)
     {
         _listener = listener;
-        _agentView = agentView;
+        _agentView = agentView;        
         _attackCooldown = stats.attackSpeed;
         
-        InitializeAgentData(stats, rank, team);
+        InitializeAgentData(stats, rank, unitType, team, idleRotation);
         InitializeControllers();
         InitializeVisuals(team);
         
         _isActive = true;
         _lastAttackTime = -_attackCooldown;
         _currentState = AgentState.Idle;
-
-        StartAgentBehavior();
+    
+        DOVirtual.DelayedCall(0.2f, StartAgentBehavior); 
     }
     
-    private void InitializeAgentData(LevelStats stats, UnitRank rank, Team team)
+    private void InitializeAgentData(LevelStats stats, UnitRank rank, AgentUnitType unitType, Team team, Vector3 idleRotation)
     {
         _agentData = new AgentData(stats.level, stats.damage, stats.attackSpeed, stats.health, 
                                    stats.armor, stats.speed, stats.attackRange, stats.chaseRange,
-                                   rank, team);                                 
+                                   rank, unitType, team, idleRotation);                                 
         _agentData.Initialize();
     }
     
@@ -80,9 +85,17 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
         _agentView.InitializeHealthBar(HealthController.Value, HealthController.MaxValue, team);
         _agentView.SetMaterial(team);
         _agentView.SetSpeed(Speed);
-        _agentView.ResetNavMeshAgent();       
+        _agentView.ResetNavMeshAgent();
+        _agentView.SetHealthBarRotation(IdleRotation);
+        InvokeRepeating("SetHealthBarRotation", 0.1f, 0.05f);
     }    
     
+    private void SetHealthBarRotation()
+    {
+        if  (_agentView != null)
+            _agentView.SetHealthBarRotation(IdleRotation);
+    }
+
     private void StartAgentBehavior()
     {       
         UpdateEnemyTarget();
@@ -121,6 +134,12 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
         return _listener.NearestEnemy(transform.position, _agentData.ChaseRange, GetTeam);
     }    
 
+    [ContextMenu("FindNearestEnemyTest")]
+    private void FindNearestEnemyTest()
+    {
+        var enemy = FindNearestEnemy();       
+    }
+    
     private void DecideNextAction()
     {
         if (HasActiveEnemy())
@@ -204,14 +223,18 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     {
         _agentView.Idle();
         _currentState = AgentState.Idle;
+        transform.DOLocalRotate(IdleRotation, 0.15f).SetDelay(Random.Range(0.05f, 0.1f));
 
         decideActionTween = DOVirtual.DelayedCall(_idleCheckDelay, StartAgentBehavior);
     }    
 
     public void MoveTo(Vector3 destination)
     {
+        if(Vector3.Distance(destination, transform.position) < 0.1f) 
+        return;
         _agentView.MoveTo(destination);
         _currentState = AgentState.Moving;
+      //  transform.DOLocalRotate(IdleRotation, 0.1f);
     }
     
     public void StopMovement()
@@ -261,6 +284,7 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     protected virtual void OnDead(IDamageable killer)
     {
         UnsubscribeHealthEvents();
+        CancelInvoke("SetHealthBarRotation");
         _isActive = false;
         _agentView.Die();
         _listener.HandleAgentDied(this, killer);
@@ -280,6 +304,12 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     {
         
     }
+
+    public bool IsUnitAttacking()
+    {       
+        return _currentState == AgentState.Attacking;
+    }
+    
     
     // IDamageable Interface
     public Vector3 GetPosition()
@@ -317,7 +347,7 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     {
         gameObject.SetActive(false);
         gameObject.SetActive(true); 
-
+        
         if (_agentView != null)
         {
             _agentView.ResetNavMeshAgent();

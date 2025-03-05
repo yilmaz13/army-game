@@ -29,13 +29,14 @@ public class BuildingController : MonoBehaviour, IDamageable, IPoolable
                                     BuildingView buildingView, 
                                     IAgentControllerListener listener,
                                     UnitRank rank,
+                                    AgentUnitType unitType,
                                     Team team)
     {
         _listener = listener;
         _buildingView = buildingView;
         _attackCooldown = stats.attackSpeed;     
 
-        InitializeBuildingData(stats, rank, team);
+        InitializeBuildingData(stats, rank, unitType, team);
         InitializeControllers();
         InitializeVisuals(team);
         
@@ -43,11 +44,13 @@ public class BuildingController : MonoBehaviour, IDamageable, IPoolable
         _lastAttackTime = -_attackCooldown;
     }
     
-    private void InitializeBuildingData(LevelStats stats, UnitRank rank, Team team)
+    private void InitializeBuildingData(LevelStats stats, UnitRank rank, 
+                                        AgentUnitType unitType, Team team)
     {       
          _buildingData = new BuildingData(stats.level, stats.damage, stats.health, 
-                                        stats.armor, rank, team, stats.attackRange, 
+                                        stats.armor, rank, unitType, team, stats.attackRange, 
                                         stats.attackSpeed,0,0);
+
         _buildingData.Initialize();
     }
     

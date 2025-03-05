@@ -88,7 +88,12 @@ public class AgentFactory
         }
     }
     
-    public AgentController CreateAgent(AgentType type, Transform parent, Vector3 position, Team team, IAgentControllerListener listener)
+    public AgentController CreateAgent(AgentType type, 
+                                       Transform parent,
+                                       Vector3 position, 
+                                       Team team, 
+                                       IAgentControllerListener listener,
+                                       Vector3 idleRotation)
     {
         AgentStats agentStats = GetAgentStats(type);
         
@@ -129,7 +134,7 @@ public class AgentFactory
         
         int agentLevel = _agentLevels[type];
         LevelStats levelStats = agentStats.GetStatsForLevel(agentLevel);
-        
+       
         if (levelStats == null) return null;
        
         agentView.Initialize(5f, Camera.main, agentLevel);    
@@ -139,7 +144,9 @@ public class AgentFactory
             agentView,
             listener,
             levelStats.rank,
-            team
+            agentStats.unitType,
+            team,
+            idleRotation
         );
         
         return agentController;

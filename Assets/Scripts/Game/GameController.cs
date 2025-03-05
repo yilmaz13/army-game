@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
     {
         if (_spatialPartition != null)
         {
-           // _spatialPartition.DrawGizmos();
+            _spatialPartition.DrawGizmos();
         }
     }    
 
@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
         InitializeSpatialPartition();
         InitializeArmies();
         
-        InvokeRepeating(nameof(UpdateAgentPositions), 0.1f, 0.5f);
+        InvokeRepeating(nameof(UpdateAgentPositions), 0.1f, 0.03f);
         IsGameStarted = true;
     }    
   
@@ -224,7 +224,8 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
                 continue;
                 
             float dist = Vector3.Distance(position, enemy.GetPosition());
-            if (dist < minDist)
+                         
+            if (dist < minDist && dist <= range)
             {
                 minDist = dist;
                 nearestEnemy = enemy;

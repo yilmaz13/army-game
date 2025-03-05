@@ -7,4 +7,5 @@ public interface IAgentControllerListener
 
     void HandleAgentKilled(IDamageable victim); 
 
+    Vector3 GetIdleRotation();
 }
