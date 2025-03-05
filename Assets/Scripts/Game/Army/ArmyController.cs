@@ -188,14 +188,14 @@ public class ArmyController : MonoBehaviour,
     {     
         if (_team == Team.Red)
         {
-            _spawnInterval = 0.2f;
-            _maxSoldiers = 1;
+            _spawnInterval = 2f;
+            _maxSoldiers = 10;
             _castleController.GetComponent<CastleView>().SetPoint(1);
         }
         else
         {
-            _spawnInterval = 0.2f;
-            _maxSoldiers = 1;
+            _spawnInterval = 2f;
+            _maxSoldiers = 12;
         }
     }
 
