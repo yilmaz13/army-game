@@ -6,6 +6,7 @@ public class AgentStats : ScriptableObject
 {
     [Header("Base Information")]
     public AgentType agentType;
+    public AgentUnitType unitType;
     public GameObject prefab;
     
     [Header("Fixed Stats")]

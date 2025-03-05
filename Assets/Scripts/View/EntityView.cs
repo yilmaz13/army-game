@@ -36,6 +36,10 @@ public class EntityView : MonoBehaviour
         SetMaterialDie();
     }
 
+    public virtual void SetHealthBarRotation(Vector3 rotation)
+    {
+        healthView.SetRotation(rotation);
+    }
     public virtual void InitializeHealthBar(float health, float maxHealth, Team team)
     {
         if(healthView != null)

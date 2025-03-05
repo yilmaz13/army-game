@@ -44,6 +44,10 @@ public class CastleView : BuildingView
 
    }
 
+   public Vector3 GetCastleRotation()
+   {
+      return _castle.rotation.eulerAngles;
+   }
    public void SetSpawnSliderTimer(float time)
    {
       _spawnSliderView.SetTimer(time);

@@ -4,7 +4,15 @@ public enum AgentType
     Warrior,
     Swordsman,
     Giant,
-    Horseman,
+   // Horseman,
     Caslte,
     None
+}
+
+public enum AgentUnitType
+{
+    Tank,
+    Melee,
+    Ranged,
+    Support
 }

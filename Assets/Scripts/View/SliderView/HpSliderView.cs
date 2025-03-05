@@ -36,4 +36,9 @@ public class HpSliderView : SliderView
             _valueText.text = _stringBuilder.ToString();          
         }           
     }
+
+    public void SetRotation(Vector3 rotation)
+    {       
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+    }
 }
