@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CaslteStats
   m_EditorClassIdentifier: 
   agentType: 5
+  unitType: 2
   prefab: {fileID: 3544069613707860194, guid: ec991ee6c47e9be4188579745cc74334, type: 3}
   attackRange: 2
   attackSpeed: 2

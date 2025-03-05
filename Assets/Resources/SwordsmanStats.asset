@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SwordsmanStats
   m_EditorClassIdentifier: 
   agentType: 2
+  unitType: 1
   prefab: {fileID: 1812830733411721, guid: bfcddf05ad24c6749961ad29fdfd3617, type: 3}
   attackRange: 0.5
   attackSpeed: 2
@@ -24,13 +25,13 @@ MonoBehaviour:
     titleSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a, type: 3}
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
-    damage: 10
+    damage: 12
     speed: 2
     attackRange: 0.5
-    health: 100
+    health: 120
     armor: 0
     attackSpeed: 2
-    chaseRange: 3
+    chaseRange: 1.75
     upgradeDescription: 
     rank: 0
   - level: 2
@@ -39,13 +40,13 @@ MonoBehaviour:
     titleSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a, type: 3}
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
-    damage: 10
-    speed: 0.5
-    attackRange: 0
-    health: 100
+    damage: 13
+    speed: 2
+    attackRange: 0.5
+    health: 130
     armor: 0
     attackSpeed: 2
-    chaseRange: 3
+    chaseRange: 1.75
     upgradeDescription: 
     rank: 0
   - level: 3
@@ -54,13 +55,13 @@ MonoBehaviour:
     titleSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a, type: 3}
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
-    damage: 10
+    damage: 16
     speed: 2
     attackRange: 0.5
-    health: 100
+    health: 160
     armor: 0
     attackSpeed: 2
-    chaseRange: 3
+    chaseRange: 1.75
     upgradeDescription: 
     rank: 0
   - level: 4
@@ -69,13 +70,13 @@ MonoBehaviour:
     titleSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a, type: 3}
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
-    damage: 10
+    damage: 19
     speed: 2
     attackRange: 0.5
-    health: 100
+    health: 190
     armor: 0
     attackSpeed: 2
-    chaseRange: 3
+    chaseRange: 1.75
     upgradeDescription: 
     rank: 0
   - level: 5
@@ -84,12 +85,12 @@ MonoBehaviour:
     titleSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a, type: 3}
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
-    damage: 10
+    damage: 28
     speed: 2
     attackRange: 0.5
-    health: 100
+    health: 280
     armor: 0
     attackSpeed: 2
-    chaseRange: 3
+    chaseRange: 1.75
     upgradeDescription: 
     rank: 0
