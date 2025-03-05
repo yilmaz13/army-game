@@ -2409,9 +2409,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cb2471fa0995ffe4c8cd7f3567e7fd08, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7d031da2cea39aa45aecc57cbea23822, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2591,7 +2591,6 @@ MonoBehaviour:
   _cardPrefab: {fileID: 6222946129747715102, guid: fd07e16a7cd56fe47b3c4d49c64f37fb,
     type: 3}
   _cardCount: 3
-  _cardSpacing: 20
   _levelUpParticles: {fileID: 1473942115014685055}
   _openSound: {fileID: 8300000, guid: 0552cda47f7ec964d83941b326258359, type: 3}
   _selectSound: {fileID: 8300000, guid: f4c720b0802beb04f9ad44a27f90f55f, type: 3}
@@ -2660,9 +2659,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2373e10d016b82f4d88d3ceecef1e9ae, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d5bdf711e1cecbf4ea0f52264497cfbc, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
