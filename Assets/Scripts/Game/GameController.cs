@@ -28,14 +28,14 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
     
     private void Update()
     {
-        UpdateAgentPositions();
+      //  UpdateAgentPositions();
     }
     
     private void OnDrawGizmos()
     {
         if (_spatialPartition != null)
         {
-            _spatialPartition.DrawGizmos();
+           // _spatialPartition.DrawGizmos();
         }
     }    
 
@@ -64,7 +64,8 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
         PopupManager.Instance.HideAllPopups();
         InitializeSpatialPartition();
         InitializeArmies();
-
+        
+        InvokeRepeating(nameof(UpdateAgentPositions), 0.1f, 0.5f);
         IsGameStarted = true;
     }    
   
@@ -92,8 +93,9 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
         }
 
         if (_spatialPartition != null)
-        {
-            _spatialPartition.Clear();
+        {  
+             CancelInvoke(nameof(UpdateAgentPositions));
+            _spatialPartition.Clear();           
         }
 
         if (_armyControllers != null)

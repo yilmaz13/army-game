@@ -53,7 +53,8 @@ public class AgentView : EntityView
     public void StopMovement()
     {
         _animator.SetBool("Moving", false);
-        NavMeshAgent.ResetPath();
+        if (NavMeshAgent.enabled)
+            NavMeshAgent.ResetPath();
     }
     
     public override void Idle()

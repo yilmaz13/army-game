@@ -4,6 +4,7 @@ using UnityEngine;
 public class InputHandler
 {
     private LayerMask _groundLayer;   
+    private Camera _mainCamera;
     //TODO: birden fazla çarpışma kontrol ediecekse RaycastNonAlloc kullanılabilir
     // şimdilik gerek yok
     // private readonly RaycastHit[] _raycastResults = new RaycastHit[5];
@@ -13,10 +14,11 @@ public class InputHandler
     //public event Action<IDamageable> OnEnemyClicked;
     public event Action<BuildingController> OnBuildingClicked;
     
-    public InputHandler(LayerMask groundLayer)
+    public InputHandler(LayerMask groundLayer, Camera mainCamera)
     {
         _groundLayer = groundLayer;
-    }
+        _mainCamera = mainCamera;
+    }   
     
     public void Dispose()
     {        

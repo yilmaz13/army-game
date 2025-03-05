@@ -45,12 +45,14 @@ public class ArmyController : MonoBehaviour,
     public int CurrentLevel    => _currentLevel;
     public float CurrentXP     => _currentXP;
     public float XPToNextLevel => _xpToNextLevel;
+
+    private float _lastClickTime = 0f;
+    private readonly float _clickThrottleTime = 0.2f; 
     
     private void Awake()
     {
         _agentFactory = new AgentFactory();
-        _unitManager  = new UnitManager();
-        _inputHandler = new InputHandler(_groundLayer);  
+        _unitManager  = new UnitManager();      
     }  
 
     private void Update()
@@ -59,6 +61,8 @@ public class ArmyController : MonoBehaviour,
             return;
 
         HandleSpawning();
+        
+        
         _inputHandler?.ProcessInput(Camera.main);
     }
 
@@ -175,8 +179,7 @@ public class ArmyController : MonoBehaviour,
 
     private void InitializeInputHandler(){
 
-        _inputHandler = new InputHandler(_groundLayer);        
-
+        _inputHandler = new InputHandler(_groundLayer, Camera.main);       
         _inputHandler.OnGroundClicked += HandleGroundClicked;        
     }
 
@@ -185,14 +188,14 @@ public class ArmyController : MonoBehaviour,
     {     
         if (_team == Team.Red)
         {
-            _spawnInterval = 2f;
-            _maxSoldiers = 10;
+            _spawnInterval = 0.2f;
+            _maxSoldiers = 1;
             _castleController.GetComponent<CastleView>().SetPoint(1);
         }
         else
         {
-            _spawnInterval = 2f;
-            _maxSoldiers = 13;
+            _spawnInterval = 0.2f;
+            _maxSoldiers = 1;
         }
     }
 
@@ -244,7 +247,12 @@ public class ArmyController : MonoBehaviour,
     {
         if (_team == Team.Blue)
         {
-            _unitManager.MoveUnitsTo(position);
+            float currentTime = Time.time;
+            if (currentTime - _lastClickTime >= _clickThrottleTime)
+            {
+                _lastClickTime = currentTime;
+                _unitManager.MoveUnitsTo(position);
+            }
         }
     }
 

@@ -10,6 +10,8 @@ public class CastleView : BuildingView
    [SerializeField] private SpawnSliderView _spawnSliderView;   
    [SerializeField] private Transform _castle;
    [SerializeField] private Transform _bottomArenaFloor;
+   [SerializeField] private Transform _shadowParent;
+
    [SerializeField] private Transform _hpBar;
    [SerializeField] private Transform _unitSpawnerPoints;
    
@@ -33,7 +35,7 @@ public class CastleView : BuildingView
          _bottomArenaFloor.localPosition = new Vector3( _bottomArenaFloor.localPosition.x,  _bottomArenaFloor.localPosition.y, - _bottomArenaFloor.localPosition.z);
          _hpBar.rotation = Quaternion.Euler(0, 0, 0);
          _hpBar.localPosition = new Vector3( _hpBar.localPosition.x,  _hpBar.localPosition.y, - _hpBar.localPosition.z);
-         
+         _shadowParent.rotation = Quaternion.Euler(0, 0, 0);
       }
       else
       {
