@@ -19,6 +19,7 @@ public class CastleView : BuildingView
    [SerializeField] private Transform _marchPointMid;  
 
    [SerializeField] private Transform _marchPointDefensive;
+   
    [SerializeField] private ParticleSystem Castle_Damage;
    
    [SerializeField] private ParticleSystem Castle_RuinedLow;
@@ -118,6 +119,27 @@ public class CastleView : BuildingView
       Destroy(fractures.gameObject, 4f);
 
    }
+
+   public Transform GetMarchPoint()
+   {
+      return _marchPoint;
+   }
+
+   public Transform GetMarchPointMid()
+   {
+      return _marchPointMid;
+   }
+
+   public Transform GetMarchPointDefensive()
+   {
+      return _marchPointDefensive;
+   }
+
+   public Transform GetUnitSpawnerPoints()
+   {
+      return _unitSpawnerPoints;
+   }  
+
 }
 
 

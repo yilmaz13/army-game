@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using Army.Game.UI;
 using Army.Popup;
 using DG.Tweening;
 using UnityEngine;
 
-public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerListener
+public class GameController : MonoBehaviour,
+                              IGameViewListener, 
+                              IArmyControllerListener,
+                              IArmyInformation
 {
     private GameData _data;
     private GameView _view;
@@ -158,7 +162,7 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
             return null;
         }
         
-        army.Initialize(this, team, _gameResources, _gameResources.GetArmyLevelData());
+        army.Initialize(this, team, _gameResources, _gameResources.GetArmyLevelData(), this);
 
         if (team == Team.Blue)
         {
@@ -267,4 +271,42 @@ public class GameController : MonoBehaviour, IGameViewListener, IArmyControllerL
             GameEvents.EndedGame(isWin);
         });   
     }
+
+    public ArmyController GetArmyByTeam(Team team)
+    {
+        foreach (var army in _armyControllers)
+        {
+            if (army.Team == team)
+            {
+                return army;
+            }
+        }
+        return null;
+    }
+
+    public bool IsTeamDefeated(Team team)
+    {
+        return GetArmyByTeam(team).IsDefeated;
+    }
+
+   public List<ArmyController> GetArmiesByTeam(Team team)
+    {
+        List<ArmyController> result = new List<ArmyController>();
+    
+        foreach (var army in _armyControllers)
+        {
+            if (army != null && !army.IsDefeated && army.Team == team)
+            {
+                result.Add(army);
+            }
+        }
+    
+        return result;
+    }
+
+    public List<ArmyController> GetEnemyArmies()
+    {
+        return new List<ArmyController>(_armyControllers);
+    }
+
 }

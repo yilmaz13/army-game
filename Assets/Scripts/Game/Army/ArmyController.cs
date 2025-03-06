@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ArmyController : MonoBehaviour, 
-                              IAgentControllerListener                              
+                              IAgentControllerListener,
+                              IUnitFormationController,
+                              IArmyDataProvider                         
 
 {
     [Header("Team Settings")]
@@ -24,15 +26,21 @@ public class ArmyController : MonoBehaviour,
     [Header("Resources & State")]
     [SerializeField] private GameResources _gameResources;
     [SerializeField] private bool _isDefeated = false;
+
+    [Header("AI Settings")]
+    [SerializeField] private bool _useAI = false;
+    [SerializeField] private StrategyType _initialStrategy = StrategyType.Balanced;
     
     // PRIVATE FIELDS 
     private IArmyControllerListener _listener;
+    private IArmyInformation _armyInformation;
     private AgentFactory _agentFactory;
     private UnitManager _unitManager;
     private InputHandler _inputHandler;
     private CastleController _castleController;
     private ILevelUpStrategy _levelUpStrategy;
     private float _spawnTimer = 0f;
+    private ArmyDecisionMaker _decisionMaker;
 
     public Action<float> OnLevelUp;
     public Action<float, float> OnExperienceChanged;
@@ -62,8 +70,14 @@ public class ArmyController : MonoBehaviour,
 
         HandleSpawning();
         
-        
-        _inputHandler?.ProcessInput(Camera.main);
+        if (!_isPlayerControlled && _decisionMaker != null)
+        {
+            _decisionMaker.OnUpdate();
+        }
+        else 
+        {
+            _inputHandler?.ProcessInput(Camera.main);
+        }
     }
 
     private void HandleSpawning()
@@ -77,8 +91,8 @@ public class ArmyController : MonoBehaviour,
             
             if (_team == Team.Red)
             {
-                Vector3 spawnPosition = transform.position + new Vector3(0, 0, -1);
-                _unitManager.MoveUnitsTo(spawnPosition);
+              //  Vector3 spawnPosition = transform.position + new Vector3(0, 0, -1);
+              //  _unitManager.MoveUnitsTo(spawnPosition);
             }
         }
     }   
@@ -110,11 +124,12 @@ public class ArmyController : MonoBehaviour,
         }
     }
 
-    public void Initialize(IArmyControllerListener listener, Team team, GameResources gameResources, ArmyLevelData levelData)
+    public void Initialize(IArmyControllerListener listener, Team team, GameResources gameResources, ArmyLevelData levelData, IArmyInformation armyInformation)
     {
         _team = team;
         _listener = listener;
         _gameResources = gameResources;
+        _armyInformation = armyInformation;
         
         _levelData = levelData;
         _xpToNextLevel = _levelData.GetXPForLevel(_currentLevel);        
@@ -125,9 +140,31 @@ public class ArmyController : MonoBehaviour,
 
         SetPlayerControlled();
         SetLevelUpStrategy();
-        InitializeInputHandler();       
+        InitializeInputHandler();
+        
+        if (!_isPlayerControlled) 
+        {
+            InitializeAI();
+        }
     }
 
+    private void InitializeAI()
+    {
+        if (_isPlayerControlled) return;    
+        
+        var marchPoints = new Dictionary<MarchPointType, Vector3>();
+        
+        if (_castleController != null)
+        {          
+            marchPoints[MarchPointType.Defensive] = _castleController.GetMarchPoint(MarchPointType.Defensive).position;
+            marchPoints[MarchPointType.Mid] = _castleController.GetMarchPoint(MarchPointType.Mid).position;
+            marchPoints[MarchPointType.Attack] = _castleController.GetMarchPoint(MarchPointType.Attack).position;
+        }        
+      
+        _decisionMaker = new ArmyDecisionMaker(this, this, this);
+        _decisionMaker.Initialize(transform.position, marchPoints);
+    }
+    
     private void SetPlayerControlled()
     {
         if (Team == Team.Blue)
@@ -190,13 +227,13 @@ public class ArmyController : MonoBehaviour,
         if (_team == Team.Red)
         {
             _spawnInterval = 2f;
-            _maxSoldiers = 20;
+            _maxSoldiers = 10;
             _castleController.GetComponent<CastleView>().SetPoint(1);
         }
         else
         {
-            _spawnInterval = 2f;
-            _maxSoldiers = 20;
+            _spawnInterval = 5f;
+            _maxSoldiers = 10;
         }
     }
 
@@ -360,6 +397,11 @@ public class ArmyController : MonoBehaviour,
         }
     }    
 
+    public CastleController GetCastleController()
+    {
+        return _castleController;
+    }
+
     public AgentType[] GetUpgradeOptionsForCurrentLevel()
     {
         return _levelData.GetUpgradeOptionsForLevel(_currentLevel);        
@@ -425,5 +467,141 @@ public class ArmyController : MonoBehaviour,
     public Vector3 GetIdleRotation()
     {
        return GetCastleRotation();
+    }
+
+    public void MoveUnitsToDefensiveFormation(Vector3 position)
+    {
+        _unitManager.MoveUnitsWithTypeOrder(position);
+    }
+    
+    
+    public void MoveUnitsWithTypeOrder(Vector3 position)
+    {
+        _unitManager.MoveUnitsWithTypeOrder(position);
+    }
+
+    public void MoveSpecificUnitsTo(List<AgentController> units, Vector3 position)
+    {
+        _unitManager.MoveSpecificUnitsTo(units, position);
+    }
+    
+    public float GetArmyPower()
+    {
+        float power = 0;
+        var units = GetUnits();
+        foreach (var unit in units)
+        {
+            if (unit != null)
+            {
+                power += unit.Level * (unit.HealthController.Value / unit.HealthController.MaxValue);
+            }
+        }
+        return power + (CurrentLevel * 10);
+    }
+    
+    private void OnGUI()
+    {
+        /*
+        if (_useAI && !_isPlayerControlled && _decisionMaker != null && !_isDefeated)
+        {
+            string strategyText = _decisionMaker.GetCurrentStrategyName();
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 5);
+            GUI.color = _team == Team.Blue ? Color.blue : Color.red;
+            GUI.Label(new Rect(screenPos.x - 50, Screen.height - screenPos.y - 20, 100, 20), 
+                $"[{strategyText}]");
+        }
+        */
+    }
+
+    public void MoveSpecificUnitsTo(List<int> unitIDs, Vector3 targetPosition)
+    {
+        var units = new List<AgentController>();
+        foreach (var unit in GetUnits())
+        {
+            if (unitIDs.Contains(unit.GetInstanceID()))
+            {
+                units.Add(unit);
+            }
+        }
+        
+        _unitManager?.MoveSpecificUnitsTo(units, targetPosition); 
+    }
+
+    public int GetUnitCount()
+    {
+        return _unitManager?.UnitCount ?? 0;
+    }
+    
+    public float GetEnemyPower()
+    {
+        ArmyController enemy = _armyInformation.GetArmyByTeam(Team == Team.Blue ? Team.Red : Team.Blue);
+        return enemy?.GetArmyPower() ?? 0;
+    }
+    
+    public Vector3 GetEnemyPosition()
+    {
+        ArmyController enemy = _armyInformation.GetArmyByTeam(Team == Team.Blue ? Team.Red : Team.Blue);
+        return enemy?.transform.position ?? Vector3.zero;
+    }
+    
+    public bool IsEnemyDefeated()
+    {
+        ArmyController enemy = _armyInformation.GetArmyByTeam(Team == Team.Blue ? Team.Red : Team.Blue);
+        return enemy == null || enemy.IsDefeated;
+    }
+
+    public List<int> GetUnitIDs()
+    {
+        var units = GetUnits();
+        var ids = new List<int>(units.Count);
+        
+        foreach (var unit in units)
+        {
+            if (unit != null)
+            {
+                ids.Add(unit.GetInstanceID());
+            }
+        }
+        
+        return ids;
+    }
+
+    public List<int> GetTankUnitIDs()
+    {
+        var units = GetUnits();
+        var ids = new List<int>();
+        
+        foreach (var unit in units)
+        {
+            if (unit != null && unit.UnitType == AgentUnitType.Tank)
+            {
+                ids.Add(unit.GetInstanceID());
+            }
+        }
+        
+        return ids;
+    }
+
+    public List<int> GetRangedUnitIDs()
+    {
+        var units = GetUnits();
+        var ids = new List<int>();
+        
+        foreach (var unit in units)
+        {
+            if (unit != null && unit.UnitType == AgentUnitType.Ranged)
+            {
+                ids.Add(unit.GetInstanceID());
+            }
+        }
+        
+        return ids;
+    }
+
+   public List<ArmyController> GetEnemyArmies()
+    {
+        if (_armyInformation == null) return new List<ArmyController>();
+    
+        return _armyInformation.GetArmiesByTeam(_team == Team.Blue ? Team.Red : Team.Blue);
     }
 }

@@ -112,4 +112,31 @@ public class CastleController : BuildingController, IDamageable
         };
     }
 
+    public Transform GetMarchPoint(MarchPointType pointType)
+    {
+        if (_castleView != null)
+        {
+            switch (pointType)
+            {
+                case MarchPointType.Defensive:
+                    return _castleView.GetMarchPointDefensive();
+                case MarchPointType.Attack:
+                    return _castleView.GetMarchPoint();
+                case MarchPointType.Mid:
+                    return _castleView.GetMarchPointMid();
+            }           
+        }        
+   
+        return transform;
+    }
+
+    public Transform GetUnitSpawnerPoints()
+    {
+        if (_castleView != null)
+        {
+            return _castleView.GetUnitSpawnerPoints();
+        }        
+
+        return transform;
+    }
 }

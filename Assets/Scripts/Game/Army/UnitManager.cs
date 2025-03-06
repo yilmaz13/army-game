@@ -231,4 +231,56 @@ public class UnitManager
         _agents.Clear();
         _buildings.Clear();
     }
+
+    public void MoveSpecificUnitsTo(List<AgentController> specificUnits, Vector3 targetPosition)
+    {
+        if (specificUnits == null || specificUnits.Count == 0) return;        
+      
+        _formationPositions.Clear();
+        _formationTarget = targetPosition;
+        _shouldDisplayFormation = true;
+        _formationEndTime = Time.time + _formationDisplayTime;        
+       
+        int totalUnits = specificUnits.Count;
+        int numRows = Mathf.CeilToInt((float)totalUnits / MAX_UNITS_PER_ROW);        
+        
+        int unitsInLastRow = totalUnits % MAX_UNITS_PER_ROW;
+        if (unitsInLastRow == 0 && totalUnits > 0) unitsInLastRow = MAX_UNITS_PER_ROW;        
+     
+        Vector3 formationCenter = targetPosition;
+        List<Vector3> positions = new List<Vector3>();
+        
+        for (int row = 0; row < numRows; row++)
+        {
+            int unitsInThisRow = (row == numRows - 1) ? unitsInLastRow : MAX_UNITS_PER_ROW;
+            float rowWidth = (unitsInThisRow - 1) * UNIT_SPACING_X;
+            float startX = formationCenter.x - rowWidth / 2;
+            float rowZ = formationCenter.z + row * UNIT_SPACING_Z;
+            
+            for (int col = 0; col < unitsInThisRow; col++)
+            {
+                Vector3 unitPosition = new Vector3(
+                    startX + col * UNIT_SPACING_X,
+                    formationCenter.y,
+                    rowZ
+                );
+                
+                positions.Add(unitPosition);
+                _formationPositions.Add(unitPosition);
+            }
+        }
+           
+        for (int i = 0; i < specificUnits.Count; i++)
+        {
+            AgentController unit = specificUnits[i];
+            if (unit != null && i < positions.Count)
+            {                
+                if (!unit.IsUnitAttacking())
+                {
+                    unit.MoveTo(positions[i]);
+                }              
+            }
+        }
+    }
+  
 }
