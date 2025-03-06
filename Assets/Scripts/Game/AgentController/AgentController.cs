@@ -33,9 +33,9 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
 
     private Tween decideActionTween;
 
-    [SerializeField] private float _idleCheckDelay = 0.5f; 
-    [SerializeField] private float _combatCheckDelay = 0.2f;
-    [SerializeField] private float _chaseCheckDelay = 0.4f; 
+    [SerializeField] private float _idleCheckDelay = 0.1f; 
+    [SerializeField] private float _combatCheckDelay = 0.1f;
+    [SerializeField] private float _chaseCheckDelay = 0.1f; 
     
     // Initialize Methods
     public void Initialize(
