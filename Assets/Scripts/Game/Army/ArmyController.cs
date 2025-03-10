@@ -56,6 +56,8 @@ public class ArmyController : MonoBehaviour,
 
     private float _lastClickTime = 0f;
     private readonly float _clickThrottleTime = 0.2f; 
+    private Vector3 _lastClickPosition;
+    private bool _hasLastClickPosition = false;
     
     private void Awake()
     {
@@ -88,12 +90,6 @@ public class ArmyController : MonoBehaviour,
             _spawnTimer = 0f;
             SpawnSoldier();
             _castleController.ShowSpawnSlider(2);
-            
-            if (_team == Team.Red)
-            {
-              //  Vector3 spawnPosition = transform.position + new Vector3(0, 0, -1);
-              //  _unitManager.MoveUnitsTo(spawnPosition);
-            }
         }
     }   
 
@@ -119,8 +115,30 @@ public class ArmyController : MonoBehaviour,
         
         if (agent != null)
         {
+            // Önce birimi UnitManager'a ekle
             _unitManager.AddAgent(agent);
             _listener.HandleAgentSpawned(agent);
+            
+            // Formasyon ile hareket ettir
+            if (_isPlayerControlled && _hasLastClickPosition)
+            {
+                // Oyuncu kontrolündeyse, tüm birimleri formasyon halinde yeni pozisyona gönder
+                // Bunu UnitManager.MoveUnitsTo ile yapmak yerine, yeni bir metod kullanacağız
+                _unitManager.FormationAddUnit(agent, _lastClickPosition);
+            }
+            else if (!_isPlayerControlled)
+            {
+                // AI kontrolündeyse ve defensive march point varsa
+                if (_castleController != null)
+                {
+                    // Defensive pozisyona birimi formasyon içinde ekle
+                    Transform defensePoint = _castleController.GetMarchPoint(MarchPointType.Defensive);
+                    if (defensePoint != null)
+                    {
+                        _unitManager.FormationAddUnit(agent, defensePoint.position);
+                    }
+                }
+            }
         }
     }
 
@@ -226,14 +244,14 @@ public class ArmyController : MonoBehaviour,
     {     
         if (_team == Team.Red)
         {
-            _spawnInterval = 2f;
+            _spawnInterval = 5f;
             _maxSoldiers = 10;
             _castleController.GetComponent<CastleView>().SetPoint(1);
         }
         else
         {
-            _spawnInterval = 5f;
-            _maxSoldiers = 10;
+            _spawnInterval = 2f;
+            _maxSoldiers = 15;
         }
     }
 
@@ -289,6 +307,8 @@ public class ArmyController : MonoBehaviour,
             if (currentTime - _lastClickTime >= _clickThrottleTime)
             {
                 _lastClickTime = currentTime;
+                _lastClickPosition = position;
+                _hasLastClickPosition = true;
                 _unitManager.MoveUnitsTo(position);
             }
         }

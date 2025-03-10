@@ -41,7 +41,7 @@ public class AgentStats : ScriptableObject
     public float GetSpeedForLevel(int level)
     {
         LevelStats stats = GetStatsForLevel(level);
-        return stats != null ? stats.speed : 0;
+        return stats != null ? stats.moveSpeed : 0;
     }   
     
     public float GetHealthForLevel(int level)

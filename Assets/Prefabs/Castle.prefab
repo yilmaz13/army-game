@@ -6679,6 +6679,7 @@ MonoBehaviour:
   _bottomArenaFloor: {fileID: 1683095472091898106}
   _shadowParent: {fileID: 7118431892101982492}
   _hpBar: {fileID: 443470780276592953}
+  _marchPoints: {fileID: 8277713148854155192}
   _unitSpawnerPoints: {fileID: 8277713148854155192}
   _marchPoint: {fileID: 3015914314030553325}
   _marchPointMid: {fileID: 5420900790824274166}

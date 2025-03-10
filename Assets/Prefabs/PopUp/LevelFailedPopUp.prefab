@@ -63,7 +63,7 @@ MonoBehaviour:
   _panel: {fileID: 1192002557110661577}
   _infoText: {fileID: 1192002557365469227}
   _restartButton: {fileID: 1192002557364725559}
-  _menuButton: {fileID: 0}
+  _menuButton: {fileID: 6309885849653814219}
 --- !u!1 &1192002557110661578
 GameObject:
   m_ObjectHideFlags: 0

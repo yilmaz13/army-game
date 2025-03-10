@@ -11,22 +11,24 @@ public class AgentView : EntityView
     protected Rigidbody _rigidbody;
     protected GameObject _healthSliderPrefabs;
     protected GameObject _armorSliderPrefabs;
+
+    private Tween _attackTween;
    
     
     public NavMeshAgent NavMeshAgent;
-    protected float _speed;
+    protected float _moveSpeed;
 
-    public virtual void Initialize(float speed, Camera camera, GameObject healthSliderPrefabs, GameObject armorSliderPrefabs)
+    public virtual void Initialize(float moveSpeed, Camera camera, GameObject healthSliderPrefabs, GameObject armorSliderPrefabs)
     {
-        _speed = speed;
+        _moveSpeed = moveSpeed;
         _camera = camera;
         _healthSliderPrefabs = healthSliderPrefabs;
         _armorSliderPrefabs = armorSliderPrefabs;        
     }
 
-     public virtual void Initialize(float speed, Camera camera, int level)
+     public virtual void Initialize(float moveSpeed, Camera camera, int level)
     {
-        _speed = speed;
+        _moveSpeed = moveSpeed;
         _camera = camera;       
         SetLevelUpObject(level);
     }
@@ -37,7 +39,7 @@ public class AgentView : EntityView
         _animator.SetBool("Attacking", true);
         _animator.Play("AttackBegin");
 
-        DOTween.Sequence()
+        _attackTween = DOTween.Sequence()
             .AppendInterval(0.5f)
             .AppendCallback(() =>  _hitEffect.Play())
             .AppendInterval(1f)
@@ -120,12 +122,22 @@ public class AgentView : EntityView
         _animator.SetBool("Moving", false);
         _animator.SetBool("Attacking", false);
         _animator.ResetTrigger("Death");      
-        _hitEffect.Stop();        
-        _speed = 0;
+        _hitEffect.Stop();   
+        
+        _moveSpeed = 0;
+
+        if  (_attackTween != null)
+            _attackTween.Kill();        
     }
 
     public void ResetNavMeshAgent()
     {
         NavMeshAgent.enabled = true;        
-    }    
+    }
+
+    void OnDestroy()
+    {
+        DOTween.Kill(transform);
+        _attackTween.Kill();
+    }
 }

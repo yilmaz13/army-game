@@ -10,22 +10,19 @@ public enum MarchPointType
 }
 
 public class ArmyDecisionMaker
-{
-    // Referanslar
+{  
     private ArmyController _army;
     private IUnitFormationController _formationController;
     private IArmyDataProvider _dataProvider;
     private Dictionary<MarchPointType, Vector3> _marchPoints;
     private Vector3 _castlePosition;
-    
-    // Durum takibi
+   
     private bool _isAttacking = false;
     private Team _targetTeam;
-    private Vector3 _targetPosition;
-    
-    // Zamanlayıcı
+    private Vector3 _targetPosition;    
+   
     private float _decisionTimer = 0f;
-    private const float DECISION_INTERVAL = 6f; // 6 saniyede bir karar ver
+    private const float DECISION_INTERVAL = 10f;
     
     public ArmyDecisionMaker(ArmyController army, IUnitFormationController formationController, IArmyDataProvider dataProvider)
     {
@@ -37,9 +34,8 @@ public class ArmyDecisionMaker
     public void Initialize(Vector3 castlePosition, Dictionary<MarchPointType, Vector3> marchPoints)
     {
         _castlePosition = castlePosition;
-        _marchPoints = marchPoints;
-        
-        // Başlangıçta savunma pozisyonu al
+        _marchPoints = marchPoints;        
+      
         MoveToDefensivePosition();
     }
     
@@ -55,31 +51,31 @@ public class ArmyDecisionMaker
     }
     
     private void MakeDecision()
-    {
-        // En zayıf düşmanı bul
+    {        
         ArmyController weakestEnemy = FindWeakestEnemy();
         
+        float power = GetArmyPower();
+
         if (weakestEnemy != null)
         {
-            // Zayıf düşman varsa saldır
-            AttackEnemy(weakestEnemy);
+            if  (power > weakestEnemy.GetArmyPower())
+            {              
+                AttackEnemy(weakestEnemy);
+            }
         }
         else
-        {
-            // Zayıf düşman yoksa savunmaya geç
+        {           
             MoveToDefensivePosition();
         }
     }
     
     private ArmyController FindWeakestEnemy()
-    {
-        // Düşman ordularını bul
+    {      
         List<ArmyController> enemies = _dataProvider.GetEnemyArmies();
         
         if (enemies == null || enemies.Count == 0)
-            return null;
-        
-        // En zayıf düşmanı bul
+            return null;        
+    
         ArmyController weakest = null;
         float lowestPower = float.MaxValue;
         
@@ -100,30 +96,31 @@ public class ArmyDecisionMaker
         return weakest;
     }
     
+    private float GetArmyPower()
+    {        
+       return  _army.GetArmyPower();        
+    }
     private void AttackEnemy(ArmyController enemy)
     {
         Debug.Log($"Army {_army.Team} is attacking {enemy.Team}!");
         _isAttacking = true;
         _targetTeam = enemy.Team;
         _targetPosition = enemy.transform.position;
-        
-        // Birliklerimizi düşmana doğru yönlendir
+              
         _formationController.MoveUnitsWithTypeOrder(_targetPosition);
     }
     
     private void MoveToDefensivePosition()
     {
         Debug.Log($"Army {_army.Team} is taking defensive position.");
-        _isAttacking = false;
+        _isAttacking = false;        
         
-        // Savunma pozisyonuna git
         if (_marchPoints.TryGetValue(MarchPointType.Defensive, out Vector3 defensePoint))
         {
             _formationController.MoveUnitsWithTypeOrder(defensePoint);
         }
         else
-        {
-            // Savunma pozisyonu tanımlanmamışsa kale önüne git
+        {           
             Vector3 fallbackPosition = _castlePosition + new Vector3(0, 0, 3f);
             _formationController.MoveUnitsWithTypeOrder(fallbackPosition);
         }

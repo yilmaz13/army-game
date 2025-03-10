@@ -13,7 +13,7 @@ public class LevelStats
     
     [Header("Stats")]
     public float damage;
-    public float speed;
+    public float moveSpeed;
     public float attackRange;
     public float health;
     public float armor;

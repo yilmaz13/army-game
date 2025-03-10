@@ -17,7 +17,7 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     // Properties
     public int Level => _agentData.Level;
     public float Damage => _agentData.Damage;
-    public float Speed => _agentData.Speed;
+    public float Speed => _agentData.MoveSpeed;
     public float Health => _agentData.Health;
     public float Armor => _agentData.Armor;
     public UnitRank Rank => _agentData.Rank;
@@ -64,8 +64,8 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     
     private void InitializeAgentData(LevelStats stats, UnitRank rank, AgentUnitType unitType, Team team, Vector3 idleRotation)
     {
-        _agentData = new AgentData(stats.level, stats.damage, stats.attackSpeed, stats.health, 
-                                   stats.armor, stats.speed, stats.attackRange, stats.chaseRange,
+        _agentData = new AgentData(stats.level, stats.damage, stats.moveSpeed, stats.health, 
+                                   stats.armor, stats.attackSpeed, stats.attackRange, stats.chaseRange,
                                    rank, unitType, team, idleRotation);                                 
         _agentData.Initialize();
     }
@@ -99,14 +99,24 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
     private void StartAgentBehavior()
     {       
         UpdateEnemyTarget();
-    } 
+    }
+
+    void Update()
+    {
+        UpdateEnemyTarget();
+    }
 
     private void UpdateEnemyTarget()
     {
         if (!_isActive) return;           
 
         if (!HasActiveEnemy())
-        {
+        {           
+            if(_currentState == AgentState.Attacking)
+            {
+                SetStateIdle();
+            }
+
             _targetEnemy = FindNearestEnemy();
 
             if (!HasActiveEnemy())
@@ -116,7 +126,9 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
                     BecomeIdle();
                 }
                 else
-                    decideActionTween =  DOVirtual.DelayedCall(_idleCheckDelay, UpdateEnemyTarget);
+                {   //TODO:                 
+                     //decideActionTween =  DOVirtual.DelayedCall(_idleCheckDelay, UpdateEnemyTarget);
+                }                   
             }
             else    
             {
@@ -189,11 +201,11 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
         if (CanAttack())
         {
             PerformAttack();  
-            decideActionTween = DOVirtual.DelayedCall(_attackCooldown, StartAgentBehavior);            
+            //decideActionTween = DOVirtual.DelayedCall(_attackCooldown, StartAgentBehavior);            
         }
         else
         {
-            decideActionTween = DOVirtual.DelayedCall(_combatCheckDelay, StartAgentBehavior);
+           // decideActionTween = DOVirtual.DelayedCall(_combatCheckDelay, StartAgentBehavior);
         }
     }
     
@@ -216,7 +228,7 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
         _currentState = AgentState.Chasing;
         _agentView.MoveTo(_targetEnemy.GetPosition());
 
-        decideActionTween = DOVirtual.DelayedCall(_chaseCheckDelay, StartAgentBehavior);
+       // decideActionTween = DOVirtual.DelayedCall(_chaseCheckDelay, StartAgentBehavior);
     }
     
     private void BecomeIdle()
@@ -225,8 +237,13 @@ public class AgentController : MonoBehaviour, IDamageable, IPoolable
         _currentState = AgentState.Idle;
         transform.DOLocalRotate(IdleRotation, 0.15f).SetDelay(Random.Range(0.05f, 0.1f));
 
-        decideActionTween = DOVirtual.DelayedCall(_idleCheckDelay, StartAgentBehavior);
-    }    
+      //  decideActionTween = DOVirtual.DelayedCall(_idleCheckDelay, StartAgentBehavior);
+    }
+
+    private void SetStateIdle()
+    {
+        _currentState = AgentState.Idle;
+    }      
 
     public void MoveTo(Vector3 destination)
     {

@@ -163,8 +163,8 @@ public class AgentFactory
         }
         else
         {
-            Debug.LogError("No poolObject component");
-            Object.Destroy(agent.gameObject);
+          //  Debug.LogError("No poolObject component");
+          //  Object.Destroy(agent.gameObject);
         }
     }
     

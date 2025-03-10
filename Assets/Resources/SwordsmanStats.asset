@@ -26,7 +26,7 @@ MonoBehaviour:
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
     damage: 12
-    speed: 2
+    moveSpeed: 1.75
     attackRange: 0.5
     health: 120
     armor: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
     damage: 13
-    speed: 2
+    moveSpeed: 1.75
     attackRange: 0.5
     health: 130
     armor: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
     damage: 16
-    speed: 2
+    moveSpeed: 1.75
     attackRange: 0.5
     health: 160
     armor: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
     damage: 19
-    speed: 2
+    moveSpeed: 1.75
     attackRange: 0.5
     health: 190
     armor: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
     descriptionSprite: {fileID: 21300000, guid: a4b08fb8f629b404693fc26393b7b03a,
       type: 3}
     damage: 28
-    speed: 2
+    moveSpeed: 1.75
     attackRange: 0.5
     health: 280
     armor: 0

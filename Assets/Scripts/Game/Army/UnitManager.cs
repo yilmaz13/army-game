@@ -178,11 +178,11 @@ public class UnitManager
                 PoolObject poolObject = agent.GetComponent<PoolObject>();
                 if (poolObject != null)
                 {
-                    poolObject.GoToPool(2);
+                    poolObject.GoToPool();
                 }
                 else
                 {
-                    Object.Destroy(agent.gameObject, 2f);
+                   // Object.Destroy(agent.gameObject, 2f);
                 }
             }
         }
@@ -198,7 +198,7 @@ public class UnitManager
         PoolObject poolObject = agent.GetComponent<PoolObject>();
         if (poolObject != null)
         {
-            poolObject.GoToPool(2);
+            poolObject.GoToPool(1);
         }
         else
         {
@@ -282,5 +282,86 @@ public class UnitManager
             }
         }
     }
+
+    public void FormationAddUnit(AgentController newUnit, Vector3 targetPosition)
+    {
+        // Eğer hedef konumu mevcut formasyon hedefinden farklıysa veya formasyonda hiç birim yoksa
+        if (!IsFormationVisible || Vector3.Distance(_formationTarget, targetPosition) > 1f || _formationPositions.Count == 0)
+        {
+            // Yeni bir formasyon oluştur
+            MoveUnitsTo(targetPosition);
+            return;
+        }
+
+        // Mevcut formasyona yeni birimi ekle
+        List<AgentController> units = GetUnits();
+        if (units.Count <= _formationPositions.Count)
+        {
+            // Zaten yeterli formasyon pozisyonu varsa, son birim için boş pozisyonu kullan
+            for (int i = 0; i < units.Count; i++)
+            {
+                if (i < _formationPositions.Count && units[i] != null)
+                {
+                    // Son eklenen birim için pozisyon varsa, oraya yerleştir
+                    if (units[i] == newUnit && !IsUnitFighting(units[i]))
+                    {
+                        units[i].MoveTo(_formationPositions[i]);
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Yeni birim için yer yoksa, formasyonu genişlet
+            // Mevcut formasyonun boyutlarını koru, sadece yeni satır ekle
+            ExtendFormation(targetPosition, 1);
+            
+            // Yeni eklenen birimi yeni pozisyona yerleştir
+            if (_formationPositions.Count >= units.Count)
+            {
+                newUnit.MoveTo(_formationPositions[units.Count - 1]);
+            }
+        }
+    }
+
+    // Formasyonu genişletmek için yardımcı metod
+    private void ExtendFormation(Vector3 targetPosition, int additionalRows)
+    {
+        int currentRows = Mathf.CeilToInt((float)_formationPositions.Count / MAX_UNITS_PER_ROW);
+        
+        // Gizmo formasyonunu göster
+        _shouldDisplayFormation = true;
+        _formationEndTime = Time.time + _formationDisplayTime;
+        
+        // Son mevcut satırın Z pozisyonu
+        float lastRowZ = 0;
+        if (_formationPositions.Count > 0)
+        {
+            lastRowZ = _formationPositions[_formationPositions.Count - 1].z;
+        }
+        
+        // Ek satırlar ekle
+        for (int row = 0; row < additionalRows; row++)
+        {
+            float rowWidth = (MAX_UNITS_PER_ROW - 1) * UNIT_SPACING_X;
+            float startX = targetPosition.x - rowWidth / 2;
+            float rowZ = lastRowZ + UNIT_SPACING_Z;
+            
+            for (int col = 0; col < MAX_UNITS_PER_ROW; col++)
+            {
+                Vector3 unitPosition = new Vector3(
+                    startX + col * UNIT_SPACING_X,
+                    targetPosition.y,
+                    rowZ
+                );
+                
+                _formationPositions.Add(unitPosition);
+            }
+            
+            lastRowZ = rowZ;
+        }
+    } 
+
   
 }
