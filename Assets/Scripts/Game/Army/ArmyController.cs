@@ -114,24 +114,18 @@ public class ArmyController : MonoBehaviour,
         );
         
         if (agent != null)
-        {
-            // Önce birimi UnitManager'a ekle
+        {          
             _unitManager.AddAgent(agent);
-            _listener.HandleAgentSpawned(agent);
-            
-            // Formasyon ile hareket ettir
+            _listener.HandleAgentSpawned(agent);            
+           
             if (_isPlayerControlled && _hasLastClickPosition)
-            {
-                // Oyuncu kontrolündeyse, tüm birimleri formasyon halinde yeni pozisyona gönder
-                // Bunu UnitManager.MoveUnitsTo ile yapmak yerine, yeni bir metod kullanacağız
+            {              
                 _unitManager.FormationAddUnit(agent, _lastClickPosition);
             }
             else if (!_isPlayerControlled)
-            {
-                // AI kontrolündeyse ve defensive march point varsa
+            {              
                 if (_castleController != null)
-                {
-                    // Defensive pozisyona birimi formasyon içinde ekle
+                {                  
                     Transform defensePoint = _castleController.GetMarchPoint(MarchPointType.Defensive);
                     if (defensePoint != null)
                     {
@@ -390,7 +384,11 @@ public class ArmyController : MonoBehaviour,
         OnLevelUp?.Invoke(_currentLevel);
         OnExperienceChanged?.Invoke(_currentXP, _xpToNextLevel);        
       
-        _levelUpStrategy.ApplyLevelUp();       
+        if (_listener.IsGameStarted())
+        {
+            _levelUpStrategy.ApplyLevelUp();
+            return;
+        }        
         
         _castleController.ShowLevelUpNotification(_currentLevel);             
        

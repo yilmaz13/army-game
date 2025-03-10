@@ -7,4 +7,6 @@ public interface IArmyControllerListener
     IDamageable NearestEnemy(Vector3 position, float range, Team currentTeam);
 
     void OnDefeatCastle(Team team);
+
+    bool IsGameStarted();
 }

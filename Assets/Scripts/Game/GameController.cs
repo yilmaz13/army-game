@@ -309,4 +309,8 @@ public class GameController : MonoBehaviour,
         return new List<ArmyController>(_armyControllers);
     }
 
+    bool IArmyControllerListener.IsGameStarted()
+    {
+        return IsGameStarted;
+    }
 }
