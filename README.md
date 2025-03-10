@@ -40,4 +40,3 @@
   - Örnek: `Helmet01` modeli **40K vertex** içeriyordu, **MantisLODEditor** ile **400 vertex**'e düşürüldü.  
 - **Bellek ve Dosya Boyutu Optimizasyonu:**  
   - Görseller için sıkıştırma ve `max size` ayarlamaları yapıldı.  
-```  
